@@ -1,0 +1,20 @@
+[
+  {
+    "id": "isa101-dcs-dark",
+    "name": "ISA-101 Control Room Dark",
+    "selectedTokenSets": {
+      "global": "enabled",
+      "hmi_dark": "enabled",
+      "hmi_light": "disabled"
+    }
+  },
+  {
+    "id": "isa101-field-light",
+    "name": "ISA-101 Field Tablet Light",
+    "selectedTokenSets": {
+      "global": "enabled",
+      "hmi_dark": "disabled",
+      "hmi_light": "enabled"
+    }
+  }
+]

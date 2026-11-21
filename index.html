@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>T-761 Digital Twin & DCS OTS Simulator | LSP HDPE Section 700</title>
+  <link rel="icon" type="image/svg+xml" href="/public/favicon.svg" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=JetBrains+Mono:wght@400;700&display=swap" />
+  <link rel="stylesheet" href="./src/styles/main.css" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand">
+      <span class="badge">SECTION 700 • T-761 LOOP</span>
+      <strong style="font-size:14px;">Oligomer Cut Tower Digital Twin (2D P&amp;ID + 3D + DCS)</strong>
+      <div id="realtime-clock" class="clock-box">2026-11-21 21:44:00</div>
+    </div>
+
+    <div class="toolbar">
+      <button id="btn-mode-startup" class="active">▶ Start-Up (HD-W-7500-02-001)</button>
+      <button id="btn-mode-shutdown">■ Shutdown (HD-W-7500-06-001)</button>
+      <select id="sim-speed" title="Tốc độ thời gian thực">
+        <option value="1">Tốc độ: 1x (Thực)</option>
+        <option value="10">Tốc độ: 10x</option>
+        <option value="60">Tốc độ: 60x</option>
+        <option value="0">Tạm dừng (Pause)</option>
+      </select>
+      <button id="btn-open-tuning" class="warn">⚙ DCS Alarm &amp; ESD Tuning</button>
+      <button id="btn-open-equip">📘 Nguyên lý Thiết bị</button>
+      <button id="btn-print-pdf">🖨 Xuất PDF SOP</button>
+      <button id="btn-reset-all" class="danger">↺ Reset Từ Đầu</button>
+    </div>
+  </header>
+
+  <div id="alarm-banner" style="display:none;background:#7F1D1D;color:#FEE2E2;padding:6px 14px;font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:700;border-bottom:1px solid #EF4444;"></div>
+
+  <main class="workspace">
+    <!-- Left Column: Live DCS Tags -->
+    <aside class="sidebar-left">
+      <div class="card">
+        <h3>Thông số Vận hành DCS (21 Tags)</h3>
+        <div id="dcs-tags-grid" class="tag-grid"></div>
+      </div>
+    </aside>
+
+    <!-- Center Viewport: 2D P&ID & 3D Digital Twin -->
+    <section class="viewport-center">
+      <div class="viewport-tabs">
+        <div style="display:flex;gap:6px;">
+          <button id="btn-view-2d" class="active">Sơ đồ P&amp;ID 2D (Figma SVG)</button>
+          <button id="btn-view-3d">Mô hình 3D Thời gian Thực</button>
+          <button id="btn-reset-view">Căn giữa khung hình</button>
+        </div>
+        <div style="display:flex;gap:6px;align-items:center;">
+          <span style="font-size:11px;color:#FACC15;font-weight:700;">🎯 Tìm van:</span>
+          <select id="valve-locator-select" style="max-width:230px;">
+            <option value="">-- Chọn số thứ tự van (V1..V48) --</option>
+          </select>
+        </div>
+      </div>
+      <div id="pid-container"></div>
+      <div id="three-container"></div>
+    </section>
+
+    <!-- Right Column: SOP Steps & Troubleshooting -->
+    <aside class="sidebar-right">
+      <div class="card">
+        <h3>Mô phỏng Sự cố &amp; Khắc phục (SOP)</h3>
+        <div style="display:flex;gap:6px;margin-bottom:8px;">
+          <select id="deviation-select" style="flex:1;"></select>
+          <button id="btn-inject-dev" class="danger">Kích hoạt</button>
+        </div>
+        <div id="deviation-guide" style="font-size:12px;color:#CBD5E1;line-height:1.45;">
+          Chọn kịch bản sai lệch từ bảng phân tích SOP Start-up / Shutdown để thực hành xử lý.
+        </div>
+      </div>
+
+      <div class="card" style="flex:1;overflow-y:auto;">
+        <h3>Quy trình Vận hành Chuẩn (BM / FO)</h3>
+        <div id="sop-checklist"></div>
+      </div>
+    </aside>
+  </main>
+
+  <!-- Modal for DCS Tuning & Equipment Principles -->
+  <div id="main-modal" class="modal-backdrop">
+    <div class="modal-box">
+      <div class="modal-header">
+        <strong id="modal-title" style="font-size:14px;">Cấu hình</strong>
+        <button id="btn-close-modal" class="danger">✕ Đóng</button>
+      </div>
+      <div id="modal-body" class="modal-body"></div>
+    </div>
+  </div>
+
+  <script type="module" src="./src/main.js"></script>
+</body>
+</html>
